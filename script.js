@@ -8,7 +8,6 @@ const detailsContent = document.querySelector("#details");
 const humidityContent = document.querySelector("#humidite");
 const precipitationContent = document.querySelector("#precipitation");
 
-
 const fetchCoordinates = async (city) => {
     const response = await fetch(`https://nominatim.openstreetmap.org/search?q=${city}&format=json&addressdetails=1&limit=1`);
     const data = await response.json();
@@ -21,9 +20,8 @@ const fetchWeather = async (lat, lon) => {
     return data;
 }
 
-const displayDatas = async (cityDatas) => {
-    console.log(cityDatas)
-    if (cityDatas.length === 0) {
+const displayDatas = async (cityData) => {
+    if (cityData.length === 0) {
         cityContent.innerText = "Ville non trouvée";
         detailsContent.innerText = "Vérifiez le nom de la ville";
         gpsContent.innerText = `-`;
@@ -31,10 +29,9 @@ const displayDatas = async (cityDatas) => {
         humidityContent.innerText = `-`;
         precipitationContent.innerText = `-`;
     } else {
-        cityContent.innerText = cityDatas[0].address.city;
-        gpsContent.innerText = `Coordonnées GPS: ${Number.parseFloat(cityDatas[0].lat).toFixed(7)}, ${Number.parseFloat(cityDatas[0].lon).toFixed(7)}`;
-        const cityMeteoDatas = await fetchWeather(Number.parseFloat(cityDatas[0].lat).toFixed(2), Number.parseFloat(cityDatas[0].lon).toFixed(7));
-        console.log(cityMeteoDatas)
+        cityContent.innerText = cityData[0].address.city;
+        gpsContent.innerText = `Coordonnées GPS: ${Number.parseFloat(cityData[0].lat).toFixed(7)}, ${Number.parseFloat(cityData[0].lon).toFixed(7)}`;
+        const cityMeteoDatas = await fetchWeather(Number.parseFloat(cityData[0].lat).toFixed(2), Number.parseFloat(cityData[0].lon).toFixed(7));
         temperatureContent.innerText = `${cityMeteoDatas.current.temperature_2m}${cityMeteoDatas.current_units.temperature_2m}`;
         detailsContent.innerText = "Température actuelle";
         humidityContent.innerText = `Humidité : ${cityMeteoDatas.current.relative_humidity_2m + cityMeteoDatas.current_units.relative_humidity_2m}`;
@@ -43,6 +40,6 @@ const displayDatas = async (cityDatas) => {
 }
 
 okButton.addEventListener("click", async () => {
-    const cityDatas = await fetchCoordinates(cityInput.value);
-    await displayDatas(cityDatas)
+    const datas = await fetchCoordinates(cityInput.value);
+    await displayDatas(datas)
 })
