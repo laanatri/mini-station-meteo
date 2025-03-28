@@ -13,6 +13,7 @@ const ctx2 = document.getElementById('myChart2');
 const fetchCoordinates = async (city) => {
     const response = await fetch(`https://nominatim.openstreetmap.org/search?q=${city}&format=json&addressdetails=1&limit=1`);
     const data = await response.json();
+    console.log(data)
     return data;
 }
 
@@ -43,7 +44,7 @@ const displayDatas = async (cityData) => {
         humidityContent.innerText = `-`;
         precipitationContent.innerText = `-`;
     } else {
-        cityContent.innerText = cityData[0].address.city;
+        cityContent.innerText = cityData[0].name;
         gpsContent.innerText = `Coordonnées GPS: ${Number.parseFloat(cityData[0].lat).toFixed(7)}, ${Number.parseFloat(cityData[0].lon).toFixed(7)}`;
         const cityMeteoDatas = await fetchWeather(Number.parseFloat(cityData[0].lat).toFixed(2), Number.parseFloat(cityData[0].lon).toFixed(2));
         const cityMeteoDatasDays = await fetchWeathersDays(Number.parseFloat(cityData[0].lat).toFixed(2), Number.parseFloat(cityData[0].lon).toFixed(2), 2);
